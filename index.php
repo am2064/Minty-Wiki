@@ -5,7 +5,7 @@ $nav=array();
 if(isset($_GET['entry'])){
 	$nav=array(
 		"HOME"=>".",
-		"SOURCE"=>curPageURL()."&edit=true"
+		"EDIT"=>curPageURL()."&edit=true"
 	);
 }
 
@@ -47,7 +47,7 @@ function readDirectory($dir,$level=0){
 				readDirectory("$dir/$entry",$level);
 			}
 		}
-		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)/',$entry)) {
+		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)$/',$entry)) {
 			$entryURL='entry='.urlencode($dir).'/'.urlencode($entry);
 		    array_push($notDirs, "<li><a href=$url?".htmlentities($entryURL).">$entry</a></li>\n");
 		}
@@ -78,26 +78,28 @@ function readDirFileRAW($dir){
 
 function updateArticle($article,$update){
 	$file = fopen($article,"r");
-	$new_file = fopen("$article".date("DmYHi"),"w");
+	$new_file = fopen("$article".date("dmYHi"),"w");
 	$fileContents = fread($file,filesize("$article"));
-	if(is_writeable("$article".date("DmYHi"))){
+	if(is_writeable("$article".date("dmYHi"))){
 		if(fwrite($new_file,$fileContents) === FALSE){
 			echo "Could not write $article backup.<br>";
 			exit;
 		}
 		else{echo "$article has been backed up.<br>";}
 	}
-	else{echo "Could not write to $article".date("DmYHi").".<br>";}
+	else{echo "Could not write to $article".date("dmYHi").".<br>";}
+	fclose($file);
+	$file = fopen($article,"w");
 	if(is_writeable("$article")){
 		if(fwrite($file,$update) === FALSE){
-			echo "Could not update $article update.<br>";
+			echo "Could not update $article.<br>";
 			exit;
 		}
 		else{echo "$article has been updated.<br>";}
 	}
 	else{echo "Could not write to $article.<br>";}
 	fclose($file);
-	fclose($new_file);
+	//fclose($new_file);
 }
 ?>
 <html>
