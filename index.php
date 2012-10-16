@@ -1,13 +1,15 @@
 <?php
 include_once "markdown.php";
 
-$nav=array(
-	"HOME"=>".",
-	"EDIT"=>curPageURL()."&edit=true"
-);
+$nav=array();
+if(isset($_GET['entry'])){
+	$nav=array(
+		"HOME"=>".",
+		"SOURCE"=>curPageURL()."&edit=true"
+	);
+}
 
 $wikiName="WIKI NAME";
-$indent="|";
 
 function curPageURL() {
  $pageURL = 'http';
@@ -21,6 +23,7 @@ function curPageURL() {
  return $pageURL;
 }
 
+/*
 function random_color(){
     mt_srand((double)microtime()*1000000);
     $c = '';
@@ -29,26 +32,24 @@ function random_color(){
     }
     return $c;
 }
+*/
 
 function readDirectory($dir,$level=0){
 	$notDirs=array();
-	$bgcolor=random_color();
-	#$spaces = str_repeat( "<strong class='indenter'>|</strong>", ( $level ) ); 
-	$spaces = str_repeat( $indent, $level ); 
+	#$bgcolor=random_color();
+	echo "<ul class='category' id='$level'>\n";
 	if ($handle = opendir($dir)) {
 	    while (false !== ($entry = readdir($handle))) {
 		if(!preg_match('/^\..*/',$entry)){
 			if (is_dir("$dir/$entry")){
 				$level+=1;
-				echo "<div class='directory'>\n";
-				echo "<strong>$spaces Category:$entry</strong><br />\n"; 
+				echo "<li>Category:$entry</li>\n"; 
 				readDirectory("$dir/$entry",$level);
-				echo "</div>\n";
 			}
 		}
 		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)/',$entry)) {
 			$entryURL='entry='.urlencode($dir).'/'.urlencode($entry);
-		    array_push($notDirs, "$spaces<a href=$url?".htmlentities($entryURL).">$entry</a><br>\n");
+		    array_push($notDirs, "<li><a href=$url?".htmlentities($entryURL).">$entry</a></li>\n");
 		}
 	    }
 		while($entryExt=array_pop($notDirs)){
@@ -56,6 +57,7 @@ function readDirectory($dir,$level=0){
 		}
 	    closedir($handle);
 	}
+	echo "</ul>\n";
 }
 
 function readDirFile($dir){
@@ -72,6 +74,30 @@ function readDirFileRAW($dir){
 	$markContents = fread($mark,filesize("$file"));
 	echo $markContents;
 	fclose($mark);
+}
+
+function updateArticle($article,$update){
+	$file = fopen($article,"r");
+	$new_file = fopen("$article".date("DmYHi"),"w");
+	$fileContents = fread($file,filesize("$article"));
+	if(is_writeable("$article".date("DmYHi"))){
+		if(fwrite($new_file,$fileContents) === FALSE){
+			echo "Could not write $article backup.<br>";
+			exit;
+		}
+		else{echo "$article has been backed up.<br>";}
+	}
+	else{echo "Could not write to $article".date("DmYHi").".<br>";}
+	if(is_writeable("$article")){
+		if(fwrite($file,$update) === FALSE){
+			echo "Could not update $article update.<br>";
+			exit;
+		}
+		else{echo "$article has been updated.<br>";}
+	}
+	else{echo "Could not write to $article.<br>";}
+	fclose($file);
+	fclose($new_file);
 }
 ?>
 <html>
@@ -110,9 +136,18 @@ foreach($nav as $show=>$html){
 	<?php echo $wikiName; ?>
 </div>
 </div>
+<hr>
 <?php 
-echo "<hr>\n";
 $url = curPageURL();
+
+if($_POST['article']){
+	if($_POST['update']){
+		$article=$_POST['article'];
+		$update=$_POST['update'];
+		updateArticle($article,$update);
+		echo "$article updated!";
+	}
+}
 
 if (!$_GET['edit']){
 	if (empty($_GET['entry'])){
@@ -126,14 +161,14 @@ if ($_GET['edit']){
 ?>
 	<form action="." method="post">
 		<input type="hidden" name="article" value="<?php echo $_GET['entry']; ?>" >
-		<textarea rows="25" cols="100"><?php readDirFileRAW('.');?></textarea>
+		<textarea name="update" rows="25" cols="100"><?php readDirFileRAW('.');?></textarea>
 		<br/>
 		<input type="submit" value="Submit">
 	</form>
 <?php
 }
-echo "<hr>\n";
 ?>
+<hr>
 <div class="nav">
 <?php
 foreach($nav as $show=>$html){
