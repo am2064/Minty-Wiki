@@ -1,16 +1,27 @@
 <?php
 include_once "markdown.php";
 
-$nav=array();
+$editting=false;
+$backup=false;
+$wikiName="WIKI NAME";
+$user_nav=array(
+/*
+Users can place their own header entries here if they wish for them to be after HOME and EDIT
+"link"=>"url"
+*/
+);
 if(isset($_GET['entry'])){
 	$nav=array(
 		"HOME"=>".",
-		"EDIT"=>curPageURL()."&edit=true"
 	);
+	if(!isset($_GET['edit'])&&$editting){
+		$nav+=array("EDIT"=>curPageURL()."&edit=true");
+	}
+	else if(!isset($_GET['edit'])&&!$editting){
+		$nav+=array("SOURCE"=>curPageURL()."&edit=true");
+	}
 }
-
-$wikiName="WIKI NAME";
-
+$nav=array_merge($nav,$user_nav);
 function curPageURL() {
  $pageURL = 'http';
  if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
@@ -23,20 +34,8 @@ function curPageURL() {
  return $pageURL;
 }
 
-/*
-function random_color(){
-    mt_srand((double)microtime()*1000000);
-    $c = '';
-    while(strlen($c)<6){
-        $c .= sprintf("%02X", mt_rand(0, 255));
-    }
-    return $c;
-}
-*/
-
 function readDirectory($dir,$level=0){
 	$notDirs=array();
-	#$bgcolor=random_color();
 	echo "<ul class='category' id='$level'>\n";
 	if ($handle = opendir($dir)) {
 	    while (false !== ($entry = readdir($handle))) {
@@ -77,9 +76,10 @@ function readDirFileRAW($dir){
 }
 
 function updateArticle($article,$update){
+	if($backup){
 	$file = fopen($article,"r");
-	$new_file = fopen("$article".date("dmYHi"),"w");
 	$fileContents = fread($file,filesize("$article"));
+	$new_file = fopen("$article".date("dmYHi"),"w");
 	if(is_writeable("$article".date("dmYHi"))){
 		if(fwrite($new_file,$fileContents) === FALSE){
 			echo "Could not write $article backup.<br>";
@@ -89,6 +89,8 @@ function updateArticle($article,$update){
 	}
 	else{echo "Could not write to $article".date("dmYHi").".<br>";}
 	fclose($file);
+	fclose($new_file);
+	}
 	$file = fopen($article,"w");
 	if(is_writeable("$article")){
 		if(fwrite($file,$update) === FALSE){
@@ -99,7 +101,6 @@ function updateArticle($article,$update){
 	}
 	else{echo "Could not write to $article.<br>";}
 	fclose($file);
-	//fclose($new_file);
 }
 ?>
 <html>
@@ -113,15 +114,6 @@ body{background-color:99FFCC;}
 .nav{
 	float:left;
 }
-.indenter{
-	font-family:monospace;
-}
-/*
-.directory{
-	border-style:solid none solid solid;
-	color:#000000;
-}
-*/
 @import wiki.css;
 </style>
 </head>
@@ -147,7 +139,6 @@ if($_POST['article']){
 		$article=$_POST['article'];
 		$update=$_POST['update'];
 		updateArticle($article,$update);
-		echo "$article updated!";
 	}
 }
 
@@ -163,9 +154,11 @@ if ($_GET['edit']){
 ?>
 	<form action="." method="post">
 		<input type="hidden" name="article" value="<?php echo $_GET['entry']; ?>" >
-		<textarea name="update" rows="25" cols="100"><?php readDirFileRAW('.');?></textarea>
+		<textarea name="update" rows="25" cols="100"<?php if(!$editting) echo "disabled";?>><?php readDirFileRAW('.');?></textarea>
 		<br/>
+		<?php if($editting){?>
 		<input type="submit" value="Submit">
+		<?php } ?>
 	</form>
 <?php
 }
