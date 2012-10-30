@@ -4,16 +4,22 @@ include_once "markdown.php";
 $editting=false;
 $backup=false;
 $wikiName="WIKI NAME";
+#$css="webroot/path/to/css/style.css"; //Uncomment this to use css files.
 $user_nav=array(
 /*
 Users can place their own header entries here if they wish for them to be after HOME and EDIT
 "link"=>"url"
+
+Some manuals for PHP Markdown Extra have been included as an example
 */
+"PHP Markdown Extra Cheat Sheet"=>"http://tech.thingoid.com/2006/01/markdown-cheat-sheet/index.html",
+"Markdown Manual"=>"http://daringfireball.net/projects/markdown/syntax",
+"PHP Markdown Extra Manual"=>"http://michelf.ca/projects/php-markdown/extra/"
 );
-if(isset($_GET['entry'])){
 	$nav=array(
 		"HOME"=>".",
 	);
+if(isset($_GET['entry'])){
 	if(!isset($_GET['edit'])&&$editting){
 		$nav+=array("EDIT"=>curPageURL()."&edit=true");
 	}
@@ -114,8 +120,12 @@ body{background-color:99FFCC;}
 .nav{
 	float:left;
 }
-@import wiki.css;
 </style>
+<?php
+if(isset($css)){
+	print "<link rel='stylesheet' href='$css'>";
+}
+?>
 </head>
 <body>
 <div class="head">
