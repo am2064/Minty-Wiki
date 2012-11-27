@@ -66,11 +66,19 @@ function readDirectory($dir,$level=0){
 }
 
 function readDirFile($dir){
-	$file = "$dir"."/".$_GET['entry'];
-	$mark = fopen($file,"r");
-	$markContents = fread($mark,filesize("$file"));
-	echo Markdown($markContents);
-	fclose($mark);
+
+	$validEntry = $_GET['entry'];
+	if (strpos($validEntry, '..') !== false) {
+	// entry is invalid, let's show them the main page
+		readDirectory('.');
+	} else {
+	// entry is valid, carry on
+		$file = $dir."/".$validEntry;
+		$mark = fopen($file,"r");
+		$markContents = fread($mark,filesize("$file"));
+		echo Markdown($markContents);
+		fclose($mark);
+	}
 }
 
 function readDirFileRAW($dir){
@@ -161,6 +169,11 @@ if (!$_GET['edit']){
 	}
 }
 if ($_GET['edit']){
+	$validEntry = $_GET['entry'];
+	if (strpos($validEntry, '..') !== false) {
+	// entry is invalid, let's show them the main page
+		readDirectory('.');
+	} else {
 ?>
 	<form action="." method="post">
 		<input type="hidden" name="article" value="<?php echo $_GET['entry']; ?>" >
@@ -171,6 +184,7 @@ if ($_GET['edit']){
 		<?php } ?>
 	</form>
 <?php
+	}
 }
 ?>
 <hr>
