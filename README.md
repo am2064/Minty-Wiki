@@ -34,6 +34,20 @@ Make It Look Pretty
 -------------------
 
 6. Run ```/scripts/setup-bootstrap.sh```
-7. Change ```php $css to $css=array("bootstrap/css/bootstrap.css","bootstrap/css/bootstrap-responsive.css","bootstrap/css/bootstrap-extra.css");```
-8. Change ```php $exceptions to $exceptions=array("bootstrap","scripts");```
+7. Change 
+```php
+$css
+```	
+to
+```php
+$css=array("bootstrap/css/bootstrap.css","bootstrap/css/bootstrap-responsive.css","bootstrap/css/bootstrap-extra.css");
+```
+8. Change
+```php
+$exceptions
+```
+to
+```php
+$exceptions=array("bootstrap","scripts");
+```
 
