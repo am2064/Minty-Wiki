@@ -1,4 +1,3 @@
-
 What is this
 ============
 
@@ -30,24 +29,34 @@ Quick Installation
 4. Create and remove markdown files as needed
 5. Open index.php in web browser and test
 
-Make It Look Pretty
--------------------
+##Make It Look Pretty
 
-6. Run ```/scripts/setup-bootstrap.sh```
-7. Change 
-```php
+.6. Run 
+
+```bash
+/scripts/setup-bootstrap.sh
+```
+
+.7. Change 
+
+```php5
 $css
 ```	
+
 to
-```php
+
+```php5
 $css=array("bootstrap/css/bootstrap.css","bootstrap/css/bootstrap-responsive.css","bootstrap/css/bootstrap-extra.css");
 ```
-8. Change
-```php
+
+.8. Change
+
+```php5
 $exceptions
 ```
+
 to
-```php
+
+```php5
 $exceptions=array("bootstrap","scripts");
 ```
-
