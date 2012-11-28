@@ -211,7 +211,7 @@ if ($_GET['edit']){
 ?>
 	<form action="." method="post">
 		<input type="hidden" name="article" value="<?php echo $_GET['entry']; ?>" >
-		<textarea name="update" rows="25" cols="100"<?php if(!$editting) echo "disabled";?>><?php readDirFileRAW('.');?></textarea>
+		<textarea name="update" rows="25" cols="100" class="field span12" <?php if(!$editting) echo "disabled";?>><?php readDirFileRAW('.');?></textarea>
 		<br/>
 		<?php if($editting){?>
 		<input type="submit" value="Submit">
