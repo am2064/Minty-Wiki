@@ -31,15 +31,7 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>Quick Installation</h1>
-
-<ol>
-<li>Unzip or clone the repo</li>
-<li>Copy, place, or link into your web root</li>
-<li>Configure index.php</li>
-<li>Create and remove markdown files as needed</li>
-<li>Open index.php in web browser and test</li>
-</ol><h1>What is this</h1>
+        <h1>What is this</h1>
 
 <p>Minty Wiki is a wiki that uses markdown files. The idea is quick and dirty deployment where you take the index.php file, and the markdown.php library, throw them into a web folder, then populate the folder with markdown files, and folders.</p>
 
@@ -83,7 +75,40 @@
 </li>
 </ul>
 </li>
-</ul>
+</ul><h1>Quick Installation</h1>
+
+<ol>
+<li>Unzip or clone the repo</li>
+<li>Copy, place, or link into your web root</li>
+<li>Configure index.php</li>
+<li>Create and remove markdown files as needed</li>
+<li>Open index.php in web browser and test</li>
+</ol><h2>Make It Look Pretty</h2>
+
+<p>.6. Run </p>
+
+<div class="highlight"><pre>/scripts/setup-bootstrap.sh
+</pre></div>
+
+<p>.7. Change </p>
+
+<div class="highlight"><pre><span class="nv">$css</span>
+</pre></div>
+
+<p>to</p>
+
+<div class="highlight"><pre><span class="nv">$css</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="s2">"bootstrap/css/bootstrap.css"</span><span class="p">,</span><span class="s2">"bootstrap/css/bootstrap-responsive.css"</span><span class="p">,</span><span class="s2">"bootstrap/css/bootstrap-extra.css"</span><span class="p">);</span>
+</pre></div>
+
+<p>.8. Change</p>
+
+<div class="highlight"><pre><span class="nv">$exceptions</span>
+</pre></div>
+
+<p>to</p>
+
+<div class="highlight"><pre><span class="nv">$exceptions</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="s2">"bootstrap"</span><span class="p">,</span><span class="s2">"scripts"</span><span class="p">);</span>
+</pre></div>
       </section>
     </div>
 
