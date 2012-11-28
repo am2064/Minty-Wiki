@@ -6,6 +6,7 @@ $backup=false;
 $wikiName="WIKI NAME";
 $exceptions=array("scripts");
 #$css="webroot/path/to/css/style.css"; //Uncomment this to use css files.
+#$hackerImage="webroot/path/to/image/hackers/see.jpg"; //Uncomment this to use an image when people try to view the index.
 $user_nav=array(
 /*
 Users can place their own header entries here if they wish for them to be after HOME and EDIT
@@ -193,7 +194,12 @@ if (!$_GET['edit']){
 		readDirectory('.',$exceptions);
 	}
 	if ( isset($_GET['entry'])){
-		readDirFile('.',$exceptions);
+		if ( strpos($_GET['entry'], 'index.php') === false ){
+			readDirFile('.',$exceptions);
+		}
+		else{   
+			echo "<img src='$hackerImage'>";
+		}
 	}
 }
 if ($_GET['edit']){
