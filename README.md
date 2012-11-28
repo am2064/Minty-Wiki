@@ -1,11 +1,3 @@
-Quick Installation
-==================
-
-1. Unzip or clone the repo
-2. Copy, place, or link into your web root
-3. Configure index.php
-4. Create and remove markdown files as needed
-5. Open index.php in web browser and test
 
 What is this
 ============
@@ -28,3 +20,20 @@ Overview
 		* The css to style the wiki with
 	* $user_nav
 		* User options for the top and bottom navigation bar for the wiki. It is pre-populated with a number of Markdown and Markdown Extra tutorials
+
+Quick Installation
+==================
+
+1. Unzip or clone the repo
+2. Copy, place, or link into your web root
+3. Configure index.php
+4. Create and remove markdown files as needed
+5. Open index.php in web browser and test
+
+Make It Look Pretty
+-------------------
+
+6. Run ```/scripts/setup-bootstrap.sh```
+7. Change $css to $css=array("bootstrap/css/bootstrap.css","bootstrap/css/bootstrap-responsive.css","bootstrap/css/bootstrap-extra.css");
+8. Change $exceptions to $exceptions=array("bootstrap","scripts");
+
