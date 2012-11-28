@@ -31,13 +31,13 @@ Quick Installation
 
 ##Make It Look Pretty
 
-.6. Run 
+6 . Run 
 
 ```bash
 /scripts/setup-bootstrap.sh
 ```
 
-.7. Change 
+7 . Change 
 
 ```php5
 $css
@@ -49,7 +49,7 @@ to
 $css=array("bootstrap/css/bootstrap.css","bootstrap/css/bootstrap-responsive.css","bootstrap/css/bootstrap-extra.css");
 ```
 
-.8. Change
+8 . Change
 
 ```php5
 $exceptions

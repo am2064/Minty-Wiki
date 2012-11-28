@@ -6,6 +6,7 @@ $backup=false;
 $wikiName="WIKI NAME";
 $exceptions=array("scripts");
 #$css="webroot/path/to/css/style.css"; //Uncomment this to use css files.
+#$favicon="webroot/path/to/favicon.jpg"; //Uncomment this to use a favicon.
 #$hackerImage="webroot/path/to/image/hackers/see.jpg"; //Uncomment this to use an image when people try to view the index.
 $user_nav=array(
 /*
@@ -158,6 +159,10 @@ a {
 }
 </style>
 <?php
+}
+if(isset($favicon)){
+	echo "<link rel='icon' href='$favicon' type='image/x-icon' />";
+	echo "<link rel='shortcut icon' href='$favicon' type='image/x-icon' />";
 }
 ?>
 </head>
