@@ -125,6 +125,7 @@ function updateArticle($article,$update){
   <head>
     <meta charset="utf-8">
 <?php
+echo "<title>$wikiName</title>";
 if(isset($css)){
   if(is_array($css)){
     foreach($css as $css_sheet){
