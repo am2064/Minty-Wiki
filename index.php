@@ -4,6 +4,7 @@ include_once "markdown.php";
 $editting=false;
 $backup=false;
 $wikiName="WIKI NAME";
+$exceptions=array("scripts");
 #$css="webroot/path/to/css/style.css"; //Uncomment this to use css files.
 $user_nav=array(
 /*
@@ -40,16 +41,16 @@ function curPageURL() {
  return $pageURL;
 }
 
-function readDirectory($dir,$level=0){
+function readDirectory($dir,$exceptions,$level=0){
 	$notDirs=array();
 	echo "<ul class='category' id='$level'>\n";
 	if ($handle = opendir($dir)) {
 	    while (false !== ($entry = readdir($handle))) {
 		if(!preg_match('/^\..*/',$entry)){
-			if (is_dir("$dir/$entry")){
+			if (is_dir("$dir/$entry") and !in_array($entry,$exceptions)){
 				$level+=1;
-				echo "<li><h>Category:$entry</h></li>\n"; 
-				readDirectory("$dir/$entry",$level);
+				echo "<li><h>Category:$entry</h></li>\n";
+				readDirectory("$dir/$entry",$exceptions,$level);
 			}
 		}
 		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)$/',$entry)) {
@@ -67,12 +68,12 @@ function readDirectory($dir,$level=0){
 	echo "</ul>\n";
 }
 
-function readDirFile($dir){
+function readDirFile($dir,$exceptions){
 
 	$validEntry = $_GET['entry'];
 	if (strpos($validEntry, '..') !== false) {
 	// entry is invalid, let's show them the main page
-		readDirectory('.');
+		readDirectory('.',$exceptions);
 	} else {
 	// entry is valid, carry on
 		$file = $dir."/".$validEntry;
@@ -119,38 +120,62 @@ function updateArticle($article,$update){
 	fclose($file);
 }
 ?>
-<html>
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<?php
+if(isset($css)){
+  if(is_array($css)){
+    foreach($css as $css_sheet){
+    	print "<link rel='stylesheet' href='$css_sheet'>\n";
+    }
+	} else {
+  	print "<link rel='stylesheet' href='$css'>";	
+	}
+} else {
+?>
 <style type="text/css">
 p{font-family:"Times New Roman", Times, serif;}
-body{background-color:99FFCC;}
-.search{
-	text-align:right;
+body{
+  color:#2e3436;
+  background-color:#729fcf;
 }
-.nav{
-	float:left;
+a {
+  color: #555753;
+}
+.navbar ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+}
+.navbar ul li {
+  display: inline;
+  padding: 10px;
 }
 </style>
 <?php
-if(isset($css)){
-	print "<link rel='stylesheet' href='$css'>";
 }
 ?>
 </head>
 <body>
-<div class="head">
-<div class="nav">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.php"><?php echo $wikiName; ?></a>
+      <ul class="nav">
 <?php
 foreach($nav as $show=>$html){
-	echo "[<a href=$html>$show</a>] ";
+	echo "<li><a href=$html>$show</a></li>";
 }
 ?>
+      </ul>
+    </div>
+  </div>
 </div>
-<div class="search">
-	<?php echo $wikiName; ?>
-</div>
-</div>
-<hr>
+<div class="container">
 <?php 
 $url = curPageURL();
 
@@ -164,17 +189,17 @@ if($_POST['article']){
 
 if (!$_GET['edit']){
 	if (empty($_GET['entry'])){
-		readDirectory('.');
+		readDirectory('.',$exceptions);
 	}
 	if ( isset($_GET['entry'])){
-		readDirFile('.');
+		readDirFile('.',$exceptions);
 	}
 }
 if ($_GET['edit']){
 	$validEntry = $_GET['entry'];
 	if (strpos($validEntry, '..') !== false) {
 	// entry is invalid, let's show them the main page
-		readDirectory('.');
+		readDirectory('.',$exceptions);
 	} else {
 ?>
 	<form action="." method="post">
@@ -189,13 +214,7 @@ if ($_GET['edit']){
 	}
 }
 ?>
-<hr>
-<div class="nav">
-<?php
-foreach($nav as $show=>$html){
-	echo "[<a href=$html>$show</a>] ";
-}
-?>
 </div>
+
 </body>
 </html>
