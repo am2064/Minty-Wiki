@@ -48,15 +48,17 @@ function readDirectory($dir,$level=0){
 		if(!preg_match('/^\..*/',$entry)){
 			if (is_dir("$dir/$entry")){
 				$level+=1;
-				echo "<li>Category:$entry</li>\n"; 
+				echo "<li><h>Category:$entry</h></li>\n"; 
 				readDirectory("$dir/$entry",$level);
 			}
 		}
 		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)$/',$entry)) {
 			$entryURL='entry='.urlencode($dir).'/'.urlencode($entry);
-		    array_push($notDirs, "<li><a href=$url?".htmlentities($entryURL).">$entry</a></li>\n");
+		    array_push($notDirs, "<li><h><a href=$url?".htmlentities($entryURL).">$entry</a><h></li>\n");
 		}
 	    }
+		sort($notDirs);
+		$notDirs=array_reverse($notDirs);
 		while($entryExt=array_pop($notDirs)){
 			echo $entryExt;
 		}
@@ -140,7 +142,7 @@ if(isset($css)){
 <div class="nav">
 <?php
 foreach($nav as $show=>$html){
-	echo "[<a href=$html>$show</a>]";
+	echo "[<a href=$html>$show</a>] ";
 }
 ?>
 </div>
@@ -191,7 +193,7 @@ if ($_GET['edit']){
 <div class="nav">
 <?php
 foreach($nav as $show=>$html){
-	echo "[<a href=$html>$show</a>]";
+	echo "[<a href=$html>$show</a>] ";
 }
 ?>
 </div>
