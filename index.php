@@ -1,13 +1,13 @@
 <?php
 include_once "markdown.php";
-
-$editting=false;
+error_reporting(E_ALL ^ E_NOTICE);
+$editting=true;
 $backup=false;
-$wikiName="WIKI NAME";
-$exceptions=array("scripts");
-#$css="webroot/path/to/css/style.css"; //Uncomment this to use css files.
-#$favicon="webroot/path/to/favicon.jpg"; //Uncomment this to use a favicon.
+$wikiName="Minty Wiki by Tslmy";
+$exceptions=array("bootstrap","scripts");
+$css=array("bootstrap/css/bootstrap.css","bootstrap/css/bootstrap-responsive.css","bootstrap/css/bootstrap-extra.css");#$favicon="webroot/path/to/favicon.jpg"; //Uncomment this to use a favicon.
 #$hackerImage="webroot/path/to/image/hackers/see.jpg"; //Uncomment this to use an image when people try to view the index.
+
 $user_nav=array(
 /*
 Users can place their own header entries here if they wish for them to be after HOME and EDIT
@@ -15,9 +15,9 @@ Users can place their own header entries here if they wish for them to be after 
 
 Some manuals for PHP Markdown Extra have been included as an example
 */
-"PHP Markdown Extra Cheat Sheet"=>"http://tech.thingoid.com/2006/01/markdown-cheat-sheet/index.html",
-"Markdown Manual"=>"http://daringfireball.net/projects/markdown/syntax",
-"PHP Markdown Extra Manual"=>"http://michelf.ca/projects/php-markdown/extra/"
+"My Website"=>"http://www.tslimi.tk/",
+"t.t.t"=>"http://the.tslimi.tk/",
+"Powered by Minty Wiki"=>"https://github.com/tslmy/Minty-Wiki"
 );
 	$nav=array(
 		"HOME"=>".",
@@ -51,13 +51,13 @@ function readDirectory($dir,$exceptions,$level=0){
 		if(!preg_match('/^\..*/',$entry)){
 			if (is_dir("$dir/$entry") and !in_array($entry,$exceptions)){
 				$level+=1;
-				echo "<li><h>Category:$entry</h></li>\n";
+				echo "<li>Category:$entry</li>\n";
 				readDirectory("$dir/$entry",$exceptions,$level);
 			}
 		}
 		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)$/',$entry)) {
 			$entryURL='entry='.urlencode($dir).'/'.urlencode($entry);
-		    array_push($notDirs, "<li><h><a href=$url?".htmlentities($entryURL).">$entry</a><h></li>\n");
+		    array_push($notDirs, "<li><a target=\"edit\" href=$url?".htmlentities($entryURL).">$entry</a></li>\n");
 		}
 	    }
 		sort($notDirs);
@@ -126,62 +126,73 @@ function updateArticle($article,$update){
 <html lang="en">
   <head>
     <meta charset="utf-8">
+
 <?php
-echo "<title>$wikiName</title>";
-if(isset($css)){
-  if(is_array($css)){
-    foreach($css as $css_sheet){
-    	print "<link rel='stylesheet' href='$css_sheet'>\n";
-    }
+if (!$_GET['sidebar']){
+	echo "<title>$wikiName</title>";
+	if(isset($css)){
+	  if(is_array($css)){
+		foreach($css as $css_sheet){
+			print "<link rel='stylesheet' href='$css_sheet'>\n";
+		}
+		} else {
+		print "<link rel='stylesheet' href='$css'>";	
+		}
 	} else {
-  	print "<link rel='stylesheet' href='$css'>";	
+	?>
+	<style type="text/css">
+	p{font-family:"Times New Roman", Times, serif;}
+	body{
+	  color:#2e3436;
+	  background-color:#729fcf;
 	}
-} else {
-?>
-<style type="text/css">
-p{font-family:"Times New Roman", Times, serif;}
-body{
-  color:#2e3436;
-  background-color:#729fcf;
-}
-a {
-  color: #555753;
-}
-.navbar ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  text-align: center;
-}
-.navbar ul li {
-  display: inline;
-  padding: 10px;
-}
-</style>
-<?php
-}
-if(isset($favicon)){
-	echo "<link rel='icon' href='$favicon' type='image/x-icon' />";
-	echo "<link rel='shortcut icon' href='$favicon' type='image/x-icon' />";
+	a {
+	  color: #555753;
+	}
+	.navbar ul {
+	  margin: 0;
+	  padding: 0;
+	  list-style-type: none;
+	  text-align: center;
+	}
+	.navbar ul li {
+	  display: inline;
+	  padding: 10px;
+	}
+	</style>
+	<?php
+	}
+	if(isset($favicon)){
+		echo "<link rel='icon' href='$favicon' type='image/x-icon' />";
+		echo "<link rel='shortcut icon' href='$favicon' type='image/x-icon' />";
+	}
+} else {//Now called in sidebar mode.
+	echo "<link rel='stylesheet' href='sidebar.css'>";
 }
 ?>
 </head>
 <body>
+<?php 
+if (!$_GET['sidebar']){
+	?>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="navbar-inner">
+		<div class="container">
+		  <a class="brand" href="index.php"><?php echo $wikiName; ?></a>
+		  <ul class="nav">
+	<?php 
 
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="brand" href="index.php"><?php echo $wikiName; ?></a>
-      <ul class="nav">
-<?php
-foreach($nav as $show=>$html){
-	echo "<li><a href=$html>$show</a></li>";
-}
-?>
-      </ul>
-    </div>
-  </div>
-</div>
+	foreach($nav as $show=>$html){
+		echo "<li><a href=$html>$show</a></li>";
+	}
+	?>
+		  </ul>
+		</div>
+	  </div>
+	</div>
+<?php } else {//in Sidebar mode... ?>
+	<a class="brand" target="edit" href="index.php"><?php echo $wikiName; ?></a>
+<?php } ?>
 <div class="container">
 <?php 
 $url = curPageURL();

@@ -3,6 +3,16 @@ What is this
 
 Minty Wiki is a wiki that uses markdown files. The idea is quick and dirty deployment where you take the index.php file, and the markdown.php library, throw them into a web folder, then populate the folder with markdown files, and folders.
 
+What ON EARTH is this (added by [Tslmy](https://github.com/tslmy))
+==========
+_Minty Wiki by Tslmy_ is an enhanced version of the original _Minty Wiki_ by [am2064](https://github.com/am2064). New features are shown below:
+
+* A whole new view: with `<frameset>` support(calm down...), you can jump between entries at ease;
+* Notice-level PHP Exceptions are omitted by default, to make things prettier;
+* Bootstrap enabled by default;
+* Fixed the "blank padding/margin" on the top of the page;
+
+
 Overview
 ========
 
