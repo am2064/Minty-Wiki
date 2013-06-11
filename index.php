@@ -57,7 +57,7 @@ function readDirectory($dir,$exceptions,$level=0){
 		}
 		if (preg_match('/^.*\.(md|MD|markdown|MarkDown|text|Text|TEXT|txt|TXT)$/',$entry)) {
 			$entryURL='entry='.urlencode($dir).'/'.urlencode($entry);
-		    array_push($notDirs, "<li><h><a href=$url?".htmlentities($entryURL).">$entry</a><h></li>\n");
+		    array_push($notDirs, "<li><h><a href=$url?".htmlentities($entryURL).">$entry</a></h></li>\n");
 		}
 	    }
 		sort($notDirs);
