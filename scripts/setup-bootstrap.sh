@@ -6,7 +6,7 @@ wget -c http://twitter.github.com/bootstrap/assets/bootstrap.zip
 unzip bootstrap.zip
 rm bootstrap.zip
 
-echo "body {padding-top: 60px;}" > bootstrap/css/bootstrap-extra.css
+echo "body>.container {padding-top: 60px;}" > bootstrap/css/bootstrap-extra.css
 
 mv bootstrap ..
 
