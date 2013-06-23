@@ -1,0 +1,37 @@
+* {border:none; padding:0; margin:0;}
+body {
+    background:#111;
+    font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;  
+}
+
+a {
+    display:block;
+    color:#aaa;
+    text-decoration:none;
+    white-space:nowrap;
+}
+
+.brand {
+      height:55px;
+      line-height:55px;
+      text-align:center;
+      font-size:18px;
+}
+ul li:nth-child(even){
+    background:#333;
+}
+
+ul li a {
+	height:60px;
+	line-height:60px;
+    padding-left:15px;
+}
+
+ul li a:hover {
+	color:#eee;
+}
+
+ul li a:active {
+	color:#fff;
+	background:#555;
+}
